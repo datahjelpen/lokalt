@@ -14,5 +14,6 @@
 Route::get('/', 'SiteController@index')->name('index');
 
 Auth::routes(['verify' => true]);
+Route::get('epost-bekreftet', 'Auth\VerificationController@complete');
 
 Route::get('kontrollpanel', 'DashboardController@index')->name('dashboard.index');
