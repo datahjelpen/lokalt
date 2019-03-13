@@ -13,4 +13,6 @@
 
 Route::get('/', 'SiteController@index')->name('index');
 
-});
+Auth::routes(['verify' => true]);
+
+Route::get('kontrollpanel', 'DashboardController@index')->name('dashboard.index');
