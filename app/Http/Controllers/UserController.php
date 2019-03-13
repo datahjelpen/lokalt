@@ -42,7 +42,7 @@ class UserController extends Controller
         $user = $request->user();
         $session = $request->session();
 
-        if (Auth::attempt(['email' => $user->email, 'password' => $request->current_password])) {
+        if ($user->check_password($request->current_password)) {
 
             if ($request->filled('email') && $request->email != $user->email) {
                 $this->update_email_validator($request->all())->validate();
