@@ -7,7 +7,11 @@
     @csrf
 
     <fieldset>
-        <legend>{{ __('Change email') }}</legend>
+        <legend>{{ __('User info') }}</legend>
+        <div class="form-group">
+            <label for="user-update-form-name">{{ __('Name') }}</label>
+            <input id="user-update-form-name" type="text" name="name" value="{{ $user->name }}">
+        </div>
         <div class="form-group">
             <label for="user-update-form-email">{{ __('Email') }}</label>
             <input id="user-update-form-email" type="email" name="email" value="{{ $user->email }}">
@@ -26,6 +30,7 @@
     </fieldset>
     <fieldset>
         <legend>{{ __('Confirm your identity') }}</legend>
+        <p>{{ __('In order to save your changes, we need to to confirm your identity by writing your current password.') }}</p>
 
         <div class="form-group">
             <label for="user-update-form-password-current">{{ __('Current password') }}</label>

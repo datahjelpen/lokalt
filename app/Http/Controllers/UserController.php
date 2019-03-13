@@ -37,6 +37,13 @@ class UserController extends Controller
         ]);
     }
 
+    protected function update_info_validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255']
+        ]);
+    }
+
     public function update(Request $request)
     {
         $user = $request->user();
@@ -54,7 +61,6 @@ class UserController extends Controller
 
                 $session->flash('success', 'Din kontos e-post adresse ble oppdatert.');
                 $session->flash('info', 'Du må bekrefte din nye e-post. En lenke har blitt sendt til deg.');
-                return redirect()->route('index');
             }
 
             if ($request->filled('new_password')) {
@@ -64,6 +70,15 @@ class UserController extends Controller
                 $user->save();
 
                 $session->flash('success', 'Din kontos passord ble oppdatert.');
+            }
+
+            if ($request->filled('name') && $request->name != $user->name) {
+                $this->update_info_validator($request->all())->validate();
+
+                $user->name = $request->name;
+                $user->save();
+
+                $session->flash('success', 'Din konto ble oppdatert.');
             }
 
         } else {
