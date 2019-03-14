@@ -21,7 +21,6 @@ class CreatePlaceOpenHoursTable extends Migration
             $table->time('time_from')->nullable()->default(null);
             $table->time('time_to')->nullable()->default(null);
             $table->date('special_hours_date')->nullable()->default(null);
-            $table->timestamps();
         });
     }
 

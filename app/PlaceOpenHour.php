@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PlaceOpenHour extends Model
 {
     use UsesUuid;
+
+    public $timestamps = false;
 }

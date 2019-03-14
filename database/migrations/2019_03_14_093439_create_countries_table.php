@@ -22,7 +22,6 @@ class CreateCountriesTable extends Migration
             $table->string('code_iso')->unique();
             $table->string('code_call');
             $table->boolean('eu_member')->default(false);
-            $table->timestamps();
         });
     }
 

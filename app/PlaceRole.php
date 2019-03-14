@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class PlaceRole extends Model
 {
-    //
+    public $timestamps = false;
 }

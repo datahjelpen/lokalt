@@ -18,7 +18,6 @@ class CreatePlaceTypesTable extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable()->default(null);
-            $table->timestamps();
         });
     }
 

@@ -24,7 +24,6 @@ class CreateAddressesTable extends Migration
             $table->decimal('longitude', 9, 6);
             $table->smallInteger('country_id')->unsigned();
             $table->foreign('country_id')->references('id')->on('countries');
-            $table->timestamps();
         });
     }
 
