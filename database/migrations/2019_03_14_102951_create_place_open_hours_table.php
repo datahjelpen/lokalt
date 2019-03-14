@@ -17,7 +17,7 @@ class CreatePlaceOpenHoursTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('place_id');
             $table->foreign('place_id')->references('id')->on('places')->onDelete('cascade');
-            $table->tinyInteger('weekday'); // 0 is monday, 6 is sunday
+            $table->tinyInteger('weekday')->nullable()->default(null); // 0 is monday, 6 is sunday
             $table->time('time_from')->nullable()->default(null);
             $table->time('time_to')->nullable()->default(null);
             $table->date('special_hours_date')->nullable()->default(null);

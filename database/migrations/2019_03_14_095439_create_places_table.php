@@ -18,6 +18,8 @@ class CreatePlacesTable extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable()->default(null);
+            $table->tinyInteger('place_type_id')->unsigned();
+            $table->foreign('place_type_id')->references('id')->on('place_types')->onDelete('cascade');
             $table->uuid('address_id');
             $table->foreign('address_id')->references('id')->on('addresses')->onDelete('cascade');
             $table->string('website')->nullable()->default(null);

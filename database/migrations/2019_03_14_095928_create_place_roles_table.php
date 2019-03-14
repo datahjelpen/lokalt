@@ -18,7 +18,8 @@ class CreatePlaceRolesTable extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable()->default(null);
-            $table->timestamps();
+            $table->tinyInteger('place_type_id')->unsigned();
+            $table->foreign('place_type_id')->references('id')->on('place_types')->onDelete('cascade');
         });
     }
 

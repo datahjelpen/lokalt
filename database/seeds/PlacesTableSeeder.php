@@ -21,9 +21,6 @@ class PlacesTableSeeder extends Seeder
             'description' => 'En bedrift/selskap. F.eks. et AS eller ENK.'
         ]);
 
-        factory(Place::class, 50)->create();
-        factory(PlaceOpenHour::class, 50)->create();
-
         PlaceRole::create([
             'name' => 'Eier',
             'slug' => 'owner',
@@ -37,5 +34,8 @@ class PlacesTableSeeder extends Seeder
             'place_type_id' => $place_type_business->id,
             'description' => 'Ansvarlig for en avdeling innenfor bedriften.'
         ]);
+
+        factory(Place::class, 50)->create();
+        factory(PlaceOpenHour::class, 50)->create();
     }
 }

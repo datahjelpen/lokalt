@@ -3,6 +3,7 @@
 use Faker\Generator as Faker;
 
 use App\Address;
+use App\PlaceType;
 
 $factory->define(App\Place::class, function (Faker $faker) {
     // Save name so we can create a slug of the same name
@@ -15,6 +16,7 @@ $factory->define(App\Place::class, function (Faker $faker) {
         'name' => $name,
         'slug' => str_slug($name),
         'description' => [$faker->paragraph, null, null][mt_rand(0, 2)],
+        'place_type_id' => PlaceType::inRandomOrder()->first(),
         'address_id' => Address::inRandomOrder()->first(),
         'website' => [$faker->domainName, null, null][mt_rand(0, 2)],
         'phone' => [$faker->phoneNumber, null, null][mt_rand(0, 2)],
