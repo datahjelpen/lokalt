@@ -22,7 +22,7 @@ class CreateAddressesTable extends Migration
             $table->string('province');
             $table->decimal('latitude', 8, 6); // http://mysql.rjweb.org/doc.php/latlng
             $table->decimal('longitude', 9, 6);
-            $table->uuid('country_id');
+            $table->smallInteger('country_id')->unsigned();
             $table->foreign('country_id')->references('id')->on('countries');
             $table->timestamps();
         });
