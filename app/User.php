@@ -3,13 +3,14 @@
 namespace App;
 
 use Auth;
+use Traits\UsesUuid;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable;
+    use Notifiable, UsesUuid;
 
     /**
      * The attributes that are mass assignable.
@@ -44,7 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param String $password
      * @return boolean
      */
-    public function check_password(String $password) : bool
+    public function check_password(String $password): bool
     {
         return Auth::attempt(['email' => $this->email, 'password' => $password]);
     }
