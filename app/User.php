@@ -3,7 +3,7 @@
 namespace App;
 
 use Auth;
-use Traits\UsesUuid;
+use App\Traits\UsesUuid;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;

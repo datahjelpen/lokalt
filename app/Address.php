@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Traits\UsesUuid;
+use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
