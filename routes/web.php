@@ -20,3 +20,8 @@ Route::get('konto', 'UserController@show')->name('user.show');
 Route::post('konto', 'UserController@update')->name('user.update');
 
 Route::get('kontrollpanel', 'DashboardController@index')->name('dashboard.index');
+
+Route::prefix('steder')->group(function () {
+    Route::get('opprett', 'PlaceController@create')->name('places.create');
+    Route::post('lagre', 'PlaceController@store')->name('places.store');
+});

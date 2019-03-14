@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Place;
 use Illuminate\Http\Request;
 
+use App\Place;
+use App\PlaceType;
 class PlaceController extends Controller
 {
     /**
@@ -24,7 +25,14 @@ class PlaceController extends Controller
      */
     public function create()
     {
-        //
+        $place_types = PlaceType::all();
+
+        $weekdays = [
+            __('Monday'), __('Tuesday'), __('Wednesday'), __('Thursday'),
+            __('Friday'), __('Saturday'), __('Sunday')
+        ];
+
+        return view('places.create', compact('place_types', 'weekdays'));
     }
 
     /**
