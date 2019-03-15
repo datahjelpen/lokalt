@@ -2,12 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
+use App\Country;
+use App\Address;
 use App\Place;
 use App\PlaceType;
+use App\PlaceRole;
+use App\PlaceUser;
+use App\PlaceOpenHour;
+use Carbon\Carbon;
+
 class PlaceController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth')->except('show');
+        $this->middleware('verified')->except('show');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,13 +47,35 @@ class PlaceController extends Controller
     public function create()
     {
         $place_types = PlaceType::all();
+        $weekdays = PlaceOpenHour::getWeekdays();
+        $time_now = Carbon::now()->format('H:i');
 
-        $weekdays = [
-            __('Monday'), __('Tuesday'), __('Wednesday'), __('Thursday'),
-            __('Friday'), __('Saturday'), __('Sunday')
-        ];
+        return view('places.create', compact('place_types', 'weekdays', 'time_now'));
+    }
 
-        return view('places.create', compact('place_types', 'weekdays'));
+    protected function place_validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'address_id' => ['required', Rule::in(Address::pluck('id')->toArray())],
+            'place_type_id' => ['required', Rule::in(PlaceType::pluck('id')->toArray())],
+            'website' => ['nullable', 'URL'],
+            'phone' => ['nullable', 'string'],
+            'email' => ['nullable', 'email'],
+            'founded_at' => ['nullable', 'date']
+        ]);
+    }
+
+    protected function address_validator(array $data)
+    {
+        return Validator::make($data, [
+            'street_name_number' => ['required', 'string', 'max:255'],
+            'postal_code' => ['required', 'string', 'max:255'],
+            'postal_city' => ['required', 'string', 'max:255'],
+            'province' => ['required', 'string', 'max:255']
+        ]);
     }
 
     /**
@@ -43,29 +86,143 @@ class PlaceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = $request->user();
+        $session = $request->session();
+
+        // Validate address inputs
+        $this->address_validator($request->all())->validate();
+
+        // Check if address already exist
+        $address = Address::findByInfo($request->street_name_number, $request->postal_code, $request->postal_city, $request->province);
+
+        // If address doesn't exist, create it
+        if ($address === null) {
+            $address = new Address;
+            $address->street_name_number = $request->street_name_number;
+            $address->postal_code = $request->postal_code;
+            $address->postal_city = $request->postal_city;
+            $address->province = $request->province;
+            $address->country_id = Country::first()->id;
+            $address->save();
+        }
+
+        // Add address_id and slug to the request
+        $request->merge(['address_id' => $address->id]);
+        $request->merge(['slug' => str_slug($request->name)]);
+
+        // Slugs are supposed to be unique. Is there already a place with this slug?
+        // If there is, prepend some random string to the slug
+        $place = Place::findBySlug($request->slug);
+        if ($place !== null) {
+            $random_string = bin2hex(random_bytes(8));
+            $request->merge(['slug' => str_slug($request->name . '-' . $random_string)]);
+        }
+
+        // Validate the place inputs
+        $this->place_validator($request->all())->validate();
+
+        // Create the place
+        $place = new Place;
+        $place->place_type_id = $request->place_type_id;
+        $place->name = $request->name;
+        $place->slug = $request->slug;
+        $place->description = $request->description;
+        $place->address_id = $request->address_id;
+        $place->place_type_id = $request->place_type_id;
+        $place->website = $request->website;
+        $place->phone = $request->phone;
+        $place->email = $request->email;
+        $place->founded_at = $request->founded_at;
+        $place->save();
+
+        // Find the place owner role
+        $place_role = PlaceRole::where([
+            'slug' => 'owner',
+            'place_type_id' => $place->place_type_id
+        ])->first();
+
+        // Give the place and role to the user
+        $place_user = new PlaceUser;
+        $place_user->user_id = $user->id;
+        $place_user->place_id = $place->id;
+        $place_user->place_role_id = $place_role->id;
+        $place_user->save();
+
+        // Set opening hours
+        $weekdays = PlaceOpenHour::getWeekdays();
+        foreach ($weekdays as $weekday_name) {
+            $weekday_name_slug = str_slug($weekday_name);
+            $input_name_open_closed = 'open_hours_open_closed-' . $weekday_name_slug;
+            $input_name_open_from = 'open_hours_from-'  . $weekday_name_slug;
+            $input_name_open_to = 'open_hours_to-'  . $weekday_name_slug;
+
+            $day_is_open = $request->has($input_name_open_closed) && $request->{$input_name_open_closed} == 'on';
+
+            if ($day_is_open && $request->has($input_name_open_from) && $request->has($input_name_open_to)) {
+
+                // Validate the opening and closing times
+                $place_open_hours_validated = PlaceOpenHour::validateTimes($request->{$input_name_open_from}, $request->{$input_name_open_to});
+                if ($place_open_hours_validated === true) {
+                    $place_open_hour = new PlaceOpenHour;
+                    $place_open_hour->place_id = $place->id;
+                    $place_open_hour->weekday = PlaceOpenHour::getWeekdayNumber($weekday_name);
+                    $place_open_hour->time_from = $request->{$input_name_open_from};
+                    $place_open_hour->time_to = $request->{$input_name_open_to};
+                    $place_open_hour->save();
+                } else {
+                    $session->flash('error', __($place_open_hours_validated, ['weekday' => lcfirst($weekday_name)]));
+                    return redirect()->back()->withInput();
+                }
+            }
+        }
+
+        $session->flash('success', 'Stedet ble opprettet');
+        return redirect()->route('dashboard.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Place  $place
+     * @param  String  $place_slug
      * @return \Illuminate\Http\Response
      */
-    public function show(Place $place)
+    public function show(Request $request, String $place_slug)
     {
-        //
+        $place = Place::findBySlug($place_slug);
+
+        if ($place == null) {
+            abort(404, __('Place not found'));
+        }
+
+        $weekdays = PlaceOpenHour::getWeekdays();
+        $user = null;
+
+        if (Auth::check()) {
+            $user = $request->user();
+        }
+
+        return view('places.show', compact('place', 'user', 'weekdays'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Place  $place
      * @return \Illuminate\Http\Response
      */
-    public function edit(Place $place)
+    public function edit(Request $request, Place $place)
     {
-        //
+        if (!$place->userHasAccess($request->user())) {
+            $request->session()->flash('error', 'Du har ikke tilgang til å redigere dette stedet.');
+            return redirect()->route('dashboard.index');
+        }
+
+        $place_types = PlaceType::all();
+        $weekdays = PlaceOpenHour::getWeekdays();
+        $time_now = Carbon::now()->format('H:i');
+
+        return view('places.edit', compact('place', 'place_types', 'weekdays', 'time_now'));
     }
 
     /**
@@ -77,17 +234,125 @@ class PlaceController extends Controller
      */
     public function update(Request $request, Place $place)
     {
-        //
+        if (!$place->userHasAccess($request->user())) {
+            $request->session()->flash('error', 'Du har ikke tilgang til å redigere dette stedet.');
+            return redirect()->route('dashboard.index');
+        }
+
+        $user = $request->user();
+        $session = $request->session();
+
+        // Validate address inputs
+        $this->address_validator($request->all())->validate();
+
+        // Check if address already exist
+        $address = Address::findByInfo($request->street_name_number, $request->postal_code, $request->postal_city, $request->province);
+
+        // If address doesn't exist, create it
+        if ($address === null) {
+            $address = new Address;
+            $address->street_name_number = $request->street_name_number;
+            $address->postal_code = $request->postal_code;
+            $address->postal_city = $request->postal_city;
+            $address->province = $request->province;
+            $address->country_id = Country::first()->id;
+            $address->save();
+        }
+
+        // Add address_id and slug to the request
+        $request->merge(['address_id' => $address->id]);
+        $request->merge(['slug' => str_slug($request->name)]);
+
+        // Validate the place inputs
+        $this->place_validator($request->all())->validate();
+
+        // Create the place
+        $place->place_type_id = $request->place_type_id;
+        $place->name = $request->name;
+        $place->description = $request->description;
+        $place->address_id = $request->address_id;
+        $place->place_type_id = $request->place_type_id;
+        $place->website = $request->website;
+        $place->phone = $request->phone;
+        $place->email = $request->email;
+        $place->founded_at = $request->founded_at;
+        $place->save();
+
+        // Set opening hours
+        $weekdays = PlaceOpenHour::getWeekdays();
+        foreach ($weekdays as $weekday_name) {
+            $weekday_name_slug = str_slug($weekday_name);
+            $input_name_open_closed = 'open_hours_open_closed-' . $weekday_name_slug;
+            $input_name_open_from = 'open_hours_from-'  . $weekday_name_slug;
+            $input_name_open_to = 'open_hours_to-'  . $weekday_name_slug;
+
+            // Try to get existing opening hours
+            $weekday_number = PlaceOpenHour::getWeekdayNumber($weekday_name);
+            $place_open_hour = $place->opening_hours_regular->where('weekday', $weekday_number)->first();
+
+            $day_is_open = $request->has($input_name_open_closed) && $request->{$input_name_open_closed} == 'on';
+
+            if ($day_is_open && $request->has($input_name_open_from) && $request->has($input_name_open_to)) {
+
+                // Validate the opening and closing times
+                $place_open_hours_validated = PlaceOpenHour::validateTimes($request->{$input_name_open_from}, $request->{$input_name_open_to});
+                if ($place_open_hours_validated === true) {
+                    if ($place_open_hour === null) {
+                        $place_open_hour = new PlaceOpenHour;
+                    }
+
+                    $place_open_hour->place_id = $place->id;
+                    $place_open_hour->weekday = PlaceOpenHour::getWeekdayNumber($weekday_name);
+                    $place_open_hour->time_from = $request->{$input_name_open_from};
+                    $place_open_hour->time_to = $request->{$input_name_open_to};
+                    $place_open_hour->save();
+                } else {
+                    $session->flash('error', __($place_open_hours_validated, ['weekday' => lcfirst($weekday_name)]));
+                    return redirect()->back()->withInput();
+                }
+            } else if ($place_open_hour !== null) {
+                // Opening hours exist for this day, but the checkbox was unchecked, so let's delete it
+                $place_open_hour->delete();
+            }
+        }
+
+        $session->flash('success', 'Stedet ble oppdatert');
+        return redirect()->back();
+    }
+
+    /**
+     * Show the form for destroying the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Place  $place
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Request $request, Place $place)
+    {
+        if (!$place->userHasAccess($request->user())) {
+            $request->session()->flash('error', 'Du har ikke tilgang til å slette dette stedet.');
+            return redirect()->route('dashboard.index');
+        }
+
+        return view('places.delete', compact('place'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Place  $place
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Place $place)
+    public function destroy(Request $request, Place $place)
     {
-        //
+        if ($place->userHasAccess($request->user())) {
+            $place->delete();
+            $request->session()->flash('success', 'Stedet ble slettet.');
+        } else {
+            $request->session()->flash('error', 'Du har ikke tilgang til å slette dette stedet.');
+        }
+
+        return redirect()->route('dashboard.index');
     }
 }

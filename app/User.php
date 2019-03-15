@@ -49,4 +49,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Auth::attempt(['email' => $this->email, 'password' => $password]);
     }
+
+    public function places()
+    {
+        return $this->hasManyThrough('App\Place', 'App\PlaceUser', 'user_id', 'id', 'id', 'place_id');
+    }
 }
