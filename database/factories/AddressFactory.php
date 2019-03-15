@@ -7,8 +7,7 @@ use App\Country;
 
 $factory->define(App\Address::class, function (Faker $faker) {
     return [
-        'street_name' => $faker->streetName,
-        'street_number' => $faker->buildingNumber,
+        'street_name_number' => $faker->streetName . ' ' . $faker->buildingNumber,
         'postal_code' => $faker->postcode,
         'postal_city' => $faker->city,
         'province' => $faker->country,
