@@ -21,8 +21,10 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('dashboard.index');
+        $user = $request->user();
+        $places = $user->places;
+        return view('dashboard.index', compact('places'));
     }
 }
