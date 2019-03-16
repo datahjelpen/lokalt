@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Traits\UsesUuid;
+use Carbon\Carbon;
+
 use App\User;
 use App\PlaceUser;
 use App\PlaceOpenHour;
+use App\Traits\UsesUuid;
 
 class Place extends Model
 {
@@ -46,5 +48,55 @@ class Place extends Model
     public function getOpeningHoursRegularAttribute()
     {
         return PlaceOpenHour::where('place_id', $this->id)->whereIn('weekday', [1, 2, 3, 4, 5, 6, 7])->get();
+    }
+
+    public function getOpeningHoursAttribute()
+    {
+        // Get all regular and special hours
+        $open_hours_regular = PlaceOpenHour::where('place_id', $this->id)->
+                                             whereIn('weekday', [1, 2, 3, 4, 5, 6, 7])->
+                                             orderBy('weekday')->
+                                             get();
+        $open_hours_special =  PlaceOpenHour::where('place_id', $this->id)->
+                                              whereDate('special_hours_date', '>=', Carbon::now())->
+                                              whereDate('special_hours_date', '<', Carbon::now()->addMonths(2))->
+                                              orderBy('special_hours_date')->
+                                              get();
+
+        $open_hours = new \stdClass;
+        $open_hours->regular = [];
+        $open_hours->special = [];
+
+        for ($i=1; $i <= 7 ; $i++) {
+            $regular = new PlaceOpenHour;
+            $open_hours->regular[$i] = $regular;
+        }
+
+        // Add regular hours to array, indexed by weekday
+        foreach ($open_hours_regular as $regular) {
+            $open_hours->regular[$regular->weekday] = $regular;
+        }
+
+        $monday    = Carbon::now()->startOfWeek();
+        $sunday    = Carbon::now()->endOfWeek();
+
+        // Add special hours to array
+        foreach ($open_hours_special as $special) {
+            $special_date = new Carbon($special->special_hours_date);
+            $special->weekday = $special_date->dayOfWeekIso;
+
+            array_push($open_hours->special, $special);
+
+            if ($special_date->isBetween($monday, $sunday, true)) {
+                $regular = $open_hours->regular[$special->weekday];
+
+                $special->normal_time_from = $regular->time_from;
+                $special->normal_time_to = $regular->time_to;
+
+                $open_hours->regular[$special->weekday] = $special;
+            }
+        }
+
+        return $open_hours;
     }
 }

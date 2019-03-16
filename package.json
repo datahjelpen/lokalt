@@ -18,5 +18,9 @@
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
         "vue-template-compiler": "^2.6.9"
+    },
+    "dependencies": {
+        "moment": "^2.24.0",
+        "pikaday": "^1.8.0"
     }
 }

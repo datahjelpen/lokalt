@@ -311,6 +311,33 @@ class PlaceController extends Controller
             }
         }
 
+        // Handle special hours
+        $special_fields = [
+            'open_hours_from_special_dates',
+            'open_hours_from_special_opens',
+            'open_hours_from_special_closes',
+            'open_hours_from_special_info'
+        ];
+
+        // If we have one field,. we must have the rest
+        if ($request->has($special_fields[0])) {
+            foreach ($special_fields as $special_field) {
+                if (!$request->has($special_field)) {
+                    $session->flash('error', 'Noe gikk galt, vi kunne ikke legge til de spesielle åpningstidene' );
+                    return redirect()->back()->withInput();
+                }
+            }
+
+            foreach ($request->open_hours_from_special_dates as $special_date_key => $special_date_value) {
+                $place_open_hour = new PlaceOpenHour;
+                $place_open_hour->place_id = $place->id;
+                $place_open_hour->special_hours_date = $special_date_value;
+                $place_open_hour->time_from = $request->open_hours_from_special_opens[$special_date_key];
+                $place_open_hour->time_to = $request->open_hours_from_special_closes[$special_date_key];
+                $place_open_hour->save();
+            }
+        }
+
         $session->flash('success', 'Stedet ble oppdatert');
         return redirect()->back();
     }

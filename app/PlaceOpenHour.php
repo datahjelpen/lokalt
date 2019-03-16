@@ -15,20 +15,45 @@ class PlaceOpenHour extends Model
 
     public function getTimeFromAttribute($value)
     {
-        if (DateTime::createFromFormat('H:i:s', $value) === false) {
+        $datetime_format = DateTime::createFromFormat('H:i:s', $value);
+        if ($datetime_format === false) {
             return null;
         }
 
-        return Carbon::createFromFormat('H:i:s', $value)->format('H:i');
+        return $datetime_format->format('H:i');
     }
 
     public function getTimeToAttribute($value)
     {
-        if (DateTime::createFromFormat('H:i:s', $value) === false) {
+        $datetime_format = DateTime::createFromFormat('H:i:s', $value);
+        if ($datetime_format === false) {
             return null;
         }
 
-        return Carbon::createFromFormat('H:i:s', $value)->format('H:i');
+        return $datetime_format->format('H:i');
+    }
+
+    public function getSpecialHoursDateAttribute($value)
+    {
+        $datetime_format = DateTime::createFromFormat('Y-m-d', $value);
+        if ($datetime_format === false) {
+            return null;
+        }
+
+        return $datetime_format->format('d. F');
+    }
+
+    public function timeFromTo(bool $show_normal = true)
+    {
+        if ($this->special_hours_date !== null && $this->time_from == null && $show_normal && $this->normal_time_from != null) {
+            return __('Closed') . '. (' . __('Normally:') . ' ' . $this->normal_time_from . ' — ' . $this->normal_time_to . ')';
+        }
+
+        if ($this->time_from == null) {
+            return __('Closed');
+        }
+
+        return $this->time_from . ' — ' . $this->time_to;
     }
 
     // Following ISO 8601 for weekday numbering

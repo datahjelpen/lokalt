@@ -33,6 +33,10 @@ main {
     overflow-y: auto;
 }
 
+.hidden,
+.is-hidden {
+    display: none;
+}
 #nav-main {
     position: sticky;
     top: 0;
@@ -180,6 +184,42 @@ fieldset {
     }
 }
 
+.form-group-opening-hours-special {
+    position: relative;
+
+    .opening-hours-special-delete {
+        position: absolute;
+        top: -2em;
+        right: 1em;
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+        padding: 0;
+        width: 2em;
+        height: 2em;
+        color: darken($gray_light, 55%);
+        background-color: $gray_light;
+        border: 1px solid $gray_light;
+        box-shadow: 0 0.5em 1.5em -0.5em rgba(darken($gray_light, 30%), 0.5);
+
+        &:hover,
+        &:focus {
+            color: darken($red, 55%);
+            background-color: $red;
+            border: 1px solid $red;
+            box-shadow: 0 0.5em 1.5em -0.5em rgba(darken($red, 30%), 0.7);
+        }
+    }
+}
+
+.form-place-special-hours-wrapper + .form-place-special-hours-add {
+    display: none;
+}
+
+.form-place-special-hours-wrapper.has-children + .form-place-special-hours-add {
+    margin-top: 1em;
+    display: block;
+}
 .input-toggle {
     position: absolute;
     overflow: hidden;
@@ -345,6 +385,95 @@ fieldset {
 
             & + label {
                 display: none;
+            }
+        }
+    }
+}
+
+// Pika calendar
+.pika-lendar {
+    position: relative;
+    z-index: 11;
+    background-color: $white;
+    box-shadow: 0 1em 1.5em -0.75em rgba(darken($primary, 30%), 0.5);
+    width: 100%;
+    max-width: 20em;
+    padding: 1em;
+
+    .pika-title {
+        display: flex;
+        // padding: 1em;
+
+        .pika-label {
+            font-size: 0px; // Hide non-wrapper text nodes
+
+            select {
+                font-size: $font-size-base;
+            }
+        }
+
+        .pika-prev {
+            order: -1;
+        }
+
+        button {
+            margin: 0 0.5em;
+            color: $gray_dark;
+            background-color: $white;
+            border: none;
+            box-shadow: none;
+
+            &:focus,
+            &:hover {
+                color: darken($primary, 55%);
+                background-color: $primary;
+            }
+        }
+    }
+
+    .pika-table {
+        margin: 1em 0 0.5em;
+        width: 100%;
+
+        thead {
+            abbr {
+                font-weight: 400;
+                text-decoration: none;
+            }
+
+            tr th:first-child {
+                color: $gray;
+            }
+            tr th:last-child {
+                color: $gray;
+            }
+        }
+
+        tbody {
+            .pika-row td:first-child .pika-button,
+            .pika-row td:last-child .pika-button,
+            .pika-button.is-disabled {
+                color: $gray;
+            }
+
+            .pika-button.is-outside-current-month {
+                color: $gray_light;
+            }
+
+            .pika-button {
+                color: $gray_dark;
+                background-color: $white;
+                border: none;
+                box-shadow: none;
+                font-weight: 400;
+
+                &.is-today,
+                &.is-selected,
+                &:hover,
+                &:focus {
+                    color: darken($primary, 55%);
+                    background-color: $primary;
+                }
             }
         }
     }
