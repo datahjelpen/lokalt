@@ -72,6 +72,11 @@
     </div>
 </fieldset>
 <fieldset>
+    <datalist id="available-hours">
+        @foreach ($available_hours as $available_hour)
+            <option value="{{$available_hour}}"/>
+        @endforeach
+    </datalist>
     <legend>{{ __('Opening hours') }}</legend>
     <p>{{ __('Fill out hours on the 24-hour format (hh:mm).') . ' ' . __('For example:') . ' ' . $time_now }}</p>
     @php
@@ -121,6 +126,7 @@
                     pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
                     oninvalid="this.setCustomValidity('{{ __('Fill out hours on the 24-hour format (hh:mm).') }}')"
                     oninput="this.setCustomValidity('')"
+                        list="available-hours"
                     autocomplete="off"
                 >
                 <span>—</span>
@@ -132,6 +138,7 @@
                     pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
                     oninvalid="this.setCustomValidity('{{ __('Fill out hours on the 24-hour format (hh:mm).') }}')"
                     oninput="this.setCustomValidity('')"
+                        list="available-hours"
                     autocomplete="off"
                 >
                 </div>

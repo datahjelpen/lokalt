@@ -49,8 +49,9 @@ class PlaceController extends Controller
         $place_types = PlaceType::all();
         $weekdays = PlaceOpenHour::getWeekdays();
         $time_now = Carbon::now()->format('H:i');
+        $available_hours = PlaceOpenHour::getAvailableHours();
 
-        return view('places.create', compact('place_types', 'weekdays', 'time_now'));
+        return view('places.create', compact('place_types', 'weekdays', 'time_now', 'available_hours'));
     }
 
     protected function place_validator(array $data)
@@ -216,8 +217,9 @@ class PlaceController extends Controller
         $place_types = PlaceType::all();
         $weekdays = PlaceOpenHour::getWeekdays();
         $time_now = Carbon::now()->format('H:i');
+        $available_hours = PlaceOpenHour::getAvailableHours();
 
-        return view('places.edit', compact('place', 'place_types', 'weekdays', 'time_now'));
+        return view('places.edit', compact('place', 'place_types', 'weekdays', 'time_now', 'available_hours'));
     }
 
     /**

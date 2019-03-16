@@ -80,6 +80,54 @@ class PlaceOpenHour extends Model
         return array_search(ucfirst($weekday), self::getWeekdays());
     }
 
+    public static function getAvailableHours() : array
+    {
+        $available_hours = [];
+
+        // Generate from 06:00 - 00:00
+        for ($hour=6; $hour < 24; $hour++) {
+            $hour_string = $hour;
+
+            if ($hour < 10) {
+                $hour_string = '0' . $hour;
+            }
+
+            // Add every 10th minute
+            for ($minute=0; $minute < 6; $minute++) {
+                $minute_string = $minute*10;
+
+                if ($minute*10 < 10) {
+                    $minute_string = '0' . $minute*10;
+                }
+
+                array_push($available_hours, $hour_string .':'. $minute_string);
+            }
+        }
+
+        // Generate from 00:00 - 06:00
+        for ($hour=0; $hour < 6; $hour++) {
+            $hour_string = $hour;
+
+            if ($hour < 10) {
+                $hour_string = '0' . $hour;
+            }
+
+            // Add every 10th minute
+            for ($minute=0; $minute < 6; $minute++) {
+                $minute_string = $minute*10;
+
+                if ($minute*10 < 10) {
+                    $minute_string = '0' . $minute*10;
+                }
+
+                array_push($available_hours, $hour_string .':'. $minute_string);
+            }
+        }
+
+
+        return $available_hours;
+    }
+
     public static function validateTimes($time_from_input, $time_to_input)
     {
         $error = false;
