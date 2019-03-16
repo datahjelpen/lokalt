@@ -3,7 +3,7 @@
 @section('content')
 <h1>{{ __('Delete place') }}</h1>
 
-<form action="{{ route('places.destroy', $place) }}" method="post">
+<form class="form-place" action="{{ route('places.destroy', $place) }}" method="post">
     @csrf
     @method('delete')
 

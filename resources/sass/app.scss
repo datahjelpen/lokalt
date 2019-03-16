@@ -30,18 +30,35 @@ main {
     width: 38em;
     max-width: 100%;
     margin: 4em auto;
-    overflow-y: auto;
 }
 
 .hidden,
 .is-hidden {
     display: none;
 }
+
+::selection {
+    color: darken($primary, 50%);
+    background-color: $primary;
+    text-shadow: none;
+}
+
 #nav-main {
+    z-index: 10;
     position: sticky;
     top: 0;
     background-color: $white;
-    border-bottom: 3px solid $primary;
+    border-bottom: 1px solid $primary;
+    box-shadow: 0 0.5em 1.5em -0.5em rgba($primary, 0.3);
+
+    a {
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
 
     .nav-left {
         margin-right: auto;
@@ -84,12 +101,45 @@ main {
 
 a {
     color: darken($blue, 25%);
+    text-decoration: none;
+    display: inline-block;
 
     &:hover,
     &:focus {
         color: darken($blue, 50%);
-        font-style: italic;
+        text-decoration: underline;
     }
+}
+
+button {
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0.25em 0.5em;
+    color: darken($primary, 55%);
+    background-color: $primary;
+    border: 1px solid $primary;
+    font-weight: 700;
+    box-shadow: 0 0.5em 1.5em -0.5em rgba(darken($primary, 30%), 0.5);
+    border-radius: 3px;
+
+    &:hover,
+    &:focus {
+        outline: none;
+        color: lighten($primary, 20%);
+        background-color: darken($primary, 33%);
+        border: 1px solid darken($primary, 33%);
+        box-shadow: 0 0.5em 1.5em -0.5em rgba(darken($primary, 30%), 0.7);
+    }
+}
+
+hr {
+    display: block;
+    margin: 2em auto;
+    width: 100%;
+    height: 3px;
+    border: none;
+    border-radius: 3px;
+    background-color: $primary;
 }
 
 fieldset {
@@ -137,6 +187,24 @@ fieldset {
         font-family: $font-family-mono;
         border-radius: 3px;
 
+        &:focus {
+            animation: animation 250ms ease-out;
+        }
+
+        @keyframes animation {
+            0% {
+                background-color: $white;
+            }
+
+            50% {
+                background-color: lighten($accent, 20%);
+            }
+
+            100% {
+                background-color: $white;
+            }
+        }
+
         &:hover,
         &:focus {
             color: $black;
@@ -153,23 +221,20 @@ fieldset {
     }
 
     button {
-        cursor: pointer;
-        font-size: inherit;
         padding: 0.5em 1em;
         text-transform: uppercase;
         color: darken($accent, 55%);
         background-color: $accent;
         border: 1px solid $accent;
         font-weight: 700;
-        box-shadow: 0 0.33em 1.25em -0.5em rgba(darken($accent, 30%), 0.33);
-        border-radius: 3px;
+        box-shadow: 0 0.5em 1.5em -0.5em rgba(darken($accent, 30%), 0.5);
 
         &:hover,
         &:focus {
             color: lighten($accent, 20%);
             background-color: darken($accent, 33%);
             border: 1px solid darken($accent, 33%);
-            box-shadow: 0 0.33em 1.25em -0.5em rgba(darken($accent, 50%), 0.33);
+            box-shadow: 0 0.5em 1.5em -0.5em rgba(darken($accent, 30%), 0.7);
         }
     }
 }
@@ -179,6 +244,7 @@ fieldset {
         width: 5em;
 
         @media screen and (min-width: 600px) {
+            margin: 0 2px;
             width: 8em;
         }
     }
@@ -220,6 +286,27 @@ fieldset {
     margin-top: 1em;
     display: block;
 }
+
+.form-group-actions {
+    padding: 0.5em 0;
+    position: sticky;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: rgba($white, 0.75);
+    z-index: 10;
+
+    @media screen and (min-width: 600px) {
+        justify-content: flex-end;
+    }
+}
+
 .input-toggle {
     position: absolute;
     overflow: hidden;
@@ -249,7 +336,7 @@ fieldset {
         position: absolute;
         width: 3em;
         height: 1.25em;
-        background-color: #fff;
+        background-color: $white;
         border: 1px solid $gray;
     }
 
@@ -264,13 +351,28 @@ fieldset {
     }
 }
 
-.input-toggle:checked + .input-toggle-label {
+.input-toggle:focus + .input-toggle-label,
+.input-toggle:hover + .input-toggle-label {
+    &::after {
+        background-color: $gray_dark;
+        border-color: $gray_dark;
+    }
+}
+
+.input-toggle:focus + .input-toggle-label {
     &::before {
-        background-color: #fff;
+        outline: 2px dotted $gray_dark;
+        outline-offset: 0.25em;
     }
 
     &::after {
-        content: " ";
+        background-color: $gray_dark;
+        border-color: $gray_dark;
+    }
+}
+
+.input-toggle:checked + .input-toggle-label {
+    &::after {
         left: 1.75em;
         background-color: $green;
         border-color: $green;

@@ -118,29 +118,29 @@
             </label>
             <div class="input-toggle-target">
                 <div class="input-toggle-on">
-                <input
-                    type="text"
-                    placeholder="{{ __('Opens at') }}"
-                    name="open_hours_from-{{ $weekday_slug }}"
+                    <input
+                        type="text"
+                        placeholder="{{ __('Opens at') }}"
+                        aria-label="{{ __(':weekday opens at', ['weekday' => $weekday]) }}"
                         name="open_hours_from_{{ $weekday_slug }}"
                         value="{{ old('open_hours_from_' . $weekday_slug, $open_from) }}"
-                    pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
-                    oninvalid="this.setCustomValidity('{{ __('Fill out hours on the 24-hour format (hh:mm).') }}')"
-                    oninput="this.setCustomValidity('')"
+                        pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
+                        oninvalid="this.setCustomValidity('{{ __('Fill out hours on the 24-hour format (hh:mm).') }}')"
+                        oninput="this.setCustomValidity('')"
                         list="available-hours"
-                    autocomplete="off"
+                        autocomplete="off"
                     ><span>—</span><input
-                    type="text"
-                    placeholder="{{ __('Closes at') }}"
-                    name="open_hours_to-{{ $weekday_slug }}"
+                        type="text"
+                        placeholder="{{ __('Closes at') }}"
+                        aria-label="{{ __(':weekday closes at', ['weekday' => $weekday]) }}"
                         name="open_hours_to_{{ $weekday_slug }}"
                         value="{{ old('open_hours_to_' . $weekday_slug, $open_to) }}"
-                    pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
-                    oninvalid="this.setCustomValidity('{{ __('Fill out hours on the 24-hour format (hh:mm).') }}')"
-                    oninput="this.setCustomValidity('')"
+                        pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
+                        oninvalid="this.setCustomValidity('{{ __('Fill out hours on the 24-hour format (hh:mm).') }}')"
+                        oninput="this.setCustomValidity('')"
                         list="available-hours"
-                    autocomplete="off"
-                >
+                        autocomplete="off"
+                    >
                 </div>
             </div>
         </fieldset>
