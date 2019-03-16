@@ -1,7 +1,351 @@
 // Variables
 @import "variables";
 
-.navbar-laravel {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    box-sizing: border-box;
+    font-size: $font-size-base;
+}
+
+body {
+    line-height: $line-height-base;
+    color: $gray_dark;
+    background-color: $white;
+    font-family: $font-family-sans-serif;
+}
+
+main {
+    padding: 0 1em;
+    width: 38em;
+    max-width: 100%;
+    margin: 4em auto;
+    overflow-y: auto;
+}
+
+#nav-main {
+    position: sticky;
+    top: 0;
+    background-color: $white;
+    border-bottom: 3px solid $primary;
+
+    .nav-left {
+        margin-right: auto;
+        font-weight: 700;
+    }
+
+    .nav-right {
+        font-weight: 400;
+        margin-left: auto;
+
+        a {
+            margin-left: 1em;
+        }
+    }
+}
+
+#nav-main-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 1em;
+    margin: 0 auto;
+    width: 38em;
+    max-width: 100%;
+}
+
+#footer-main {
+    padding: 8em 1em 4em;
+    color: $gray;
+    background-color: $body-bg;
+}
+
+#footer-main-wrapper {
+    display: flex;
+    padding: 0 1em;
+    margin: 0 auto;
+    width: 38em;
+    max-width: 100%;
+}
+
+a {
+    color: darken($blue, 25%);
+
+    &:hover,
+    &:focus {
+        color: darken($blue, 50%);
+        font-style: italic;
+    }
+}
+
+fieldset {
+    width: 100%;
+    margin: 2em auto 0;
+    border: 3px solid $primary;
+    border-radius: 3px;
+
+    legend {
+        font-weight: 700;
+        background-color: $primary;
+        padding: 0 0.5em;
+        color: $black;
+        border-radius: 3px;
+    }
+
+    fieldset {
+        margin: 0;
+        border: 1px solid $gray_light;
+
+        legend {
+            background-color: $gray_light;
+        }
+    }
+}
+
+.form-group {
+    margin: 1em auto 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 0.5em;
+
+    @media screen and (min-width: 600px) {
+        grid-template-columns: 1fr 2fr;
+    }
+
+    input,
+    textarea,
+    select {
+        padding: 0.25em 0.5em;
+        border: 1px solid $gray;
+        color: $gray_dark;
+        background-color: $white;
+        font-size: inherit;
+        font-family: $font-family-mono;
+        border-radius: 3px;
+
+        &:hover,
+        &:focus {
+            color: $black;
+            border: 1px solid $black;
+        }
+    }
+
+    textarea {
+        width: 100%;
+        max-width: 100%;
+        max-height: 70vh;
+        min-height: 6em;
+        resize: vertical;
+    }
+
+    button {
+        cursor: pointer;
+        font-size: inherit;
+        padding: 0.5em 1em;
+        text-transform: uppercase;
+        color: darken($accent, 55%);
+        background-color: $accent;
+        border: 1px solid $accent;
+        font-weight: 700;
+        box-shadow: 0 0.33em 1.25em -0.5em rgba(darken($accent, 30%), 0.33);
+        border-radius: 3px;
+
+        &:hover,
+        &:focus {
+            color: lighten($accent, 20%);
+            background-color: darken($accent, 33%);
+            border: 1px solid darken($accent, 33%);
+            box-shadow: 0 0.33em 1.25em -0.5em rgba(darken($accent, 50%), 0.33);
+        }
+    }
+}
+
+.form-group-opening-hours {
+    input {
+        width: 5em;
+
+        @media screen and (min-width: 600px) {
+            width: 8em;
+        }
+    }
+}
+
+.input-toggle {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    font-size: 1px;
+    opacity: 0.01;
+    z-index: 0;
+}
+
+.input-toggle + .input-toggle-label {
+    position: relative;
+    padding-left: 4em;
+
+    &::before,
+    &::after {
+        cursor: pointer;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        border-radius: 3px;
+    }
+
+    &::before {
+        content: " ";
+        z-index: 1;
+        position: absolute;
+        width: 3em;
+        height: 1.25em;
+        background-color: #fff;
+        border: 1px solid $gray;
+    }
+
+    &::after {
+        content: " ";
+        z-index: 2;
+        position: absolute;
+        width: 1.25em;
+        height: 1.25em;
+        background-color: $gray;
+        border: 1px solid $gray;
+    }
+}
+
+.input-toggle:checked + .input-toggle-label {
+    &::before {
+        background-color: #fff;
+    }
+
+    &::after {
+        content: " ";
+        left: 1.75em;
+        background-color: $green;
+        border-color: $green;
+    }
+}
+
+.input-toggle-target {
+    display: inline-block;
+}
+
+.input-toggle + .input-toggle-label,
+.input-toggle ~ .input-toggle-target {
+    .input-toggle-on {
+        display: none;
+    }
+
+    .input-toggle-off {
+        display: inline-block;
+    }
+}
+
+.input-toggle:checked + .input-toggle-label,
+.input-toggle:checked ~ .input-toggle-target {
+    .input-toggle-on {
+        display: inline-block;
+    }
+
+    .input-toggle-off {
+        display: none;
+    }
+}
+
+#flash-messages {
+    position: fixed;
+    top: 2em;
+    right: 2em;
+    width: 100%;
+    max-width: 32em;
+    list-style-type: none;
+    z-index: 11; // Nav is 10
+
+    li {
+        display: block;
+        position: relative;
+
+        label {
+            cursor: pointer;
+            margin: 0 0 2em;
+            display: block;
+            padding: 2em 4em;
+            color: $white;
+            background-color: $black;
+            border: 1px solid $black;
+            border-radius: 3px;
+            box-shadow: 0 1em 1em -1em rgba(darken($blue, 50%), 0.33);
+
+            &:hover,
+            &:focus {
+                color: $black;
+                background-color: $white;
+            }
+        }
+
+        &.flash-message-success label {
+            border: none;
+            color: darken($green, 30%);
+            background-color: lighten($green, 30%);
+            box-shadow: 0 1em 1em -1em rgba($green, 0.33);
+
+            &:hover,
+            &:focus {
+                color: darken($green, 50%);
+                background-color: lighten($green, 10%);
+            }
+        }
+
+        &.flash-message-error label {
+            border: none;
+            color: darken($red, 30%);
+            background-color: lighten($red, 30%);
+            box-shadow: 0 1em 1em -1em rgba($red, 0.33);
+
+            &:hover,
+            &:focus {
+                color: darken($red, 50%);
+                background-color: lighten($red, 10%);
+            }
+        }
+
+        &.flash-message-info label {
+            border: none;
+            color: $gray;
+            background-color: $gray_light;
+            box-shadow: 0 1em 1em -1em rgba($gray, 0.33);
+
+            &:hover,
+            &:focus {
+                color: $gray_light;
+                background-color: $gray;
+            }
+        }
+
+        input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        input:checked {
+            display: none;
+
+            & + label {
+                display: none;
+            }
+        }
+    }
 }

@@ -98,19 +98,21 @@
                 }
             }
         @endphp
-        <div class="form-group">
-            <fieldset>
-                <legend>{{ $weekday }}</legend>
-                <label for="{{ $random }}-{{ $weekday_slug }}-open_closed">
-                    <span>{{ __('Open') }}</span>
-                    <span>{{ __('Closed') }}</span>
-                </label>
-                <input
-                    id="{{ $random }}-{{ $weekday_slug }}-open_closed"
-                    type="checkbox"
-                    name="open_hours_open_closed-{{ $weekday_slug }}"
-                    {{ old('open_hours_open_closed-' . $weekday_slug, $day_is_open) ? 'checked' : null }}
-                >
+        <fieldset class="form-group form-group-opening-hours">
+            <legend>{{ $weekday }}</legend>
+            <input
+                id="{{ $random }}-{{ $weekday_slug }}-open_closed"
+                type="checkbox"
+                class="input-toggle"
+                name="open_hours_open_closed-{{ $weekday_slug }}"
+                {{ old('open_hours_open_closed-' . $weekday_slug, $day_is_open) ? 'checked' : null }}
+            >
+            <label class="input-toggle-label" for="{{ $random }}-{{ $weekday_slug }}-open_closed">
+                <span class="input-toggle-off">{{ __('Closed') }}</span>
+                <span class="input-toggle-on">{{ __('Open') }}</span>
+            </label>
+            <div class="input-toggle-target">
+                <div class="input-toggle-on">
                 <input
                     type="text"
                     placeholder="{{ __('Opens at') }}"
@@ -132,7 +134,8 @@
                     oninput="this.setCustomValidity('')"
                     autocomplete="off"
                 >
-            </fieldset>
-        </div>
+                </div>
+            </div>
+        </fieldset>
     @endforeach
 </fieldset>

@@ -186,7 +186,7 @@ class PlaceController extends Controller
      * @param  String  $place_slug
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, String $place_slug)
+    public function show(String $place_slug)
     {
         $place = Place::findBySlug($place_slug);
 
@@ -195,13 +195,8 @@ class PlaceController extends Controller
         }
 
         $weekdays = PlaceOpenHour::getWeekdays();
-        $user = null;
 
-        if (Auth::check()) {
-            $user = $request->user();
-        }
-
-        return view('places.show', compact('place', 'user', 'weekdays'));
+        return view('places.show', compact('place', 'weekdays'));
     }
 
     /**

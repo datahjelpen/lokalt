@@ -2,7 +2,7 @@
     <div id="nav-main-wrapper">
         @guest
             <div class="nav-left">
-                <a href="{{ route('index') }}">{{ __('Home') }}</a>
+                <a href="{{ route('index') }}">{{ config('app.name') }}</a>
             </div>
             <div class="nav-right">
                 <a href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -13,9 +13,10 @@
         @endguest
         @auth
             <div class="nav-left">
-                <a href="{{ route('dashboard.index') }}">{{ __('Home') }}</a>
+                <a href="{{ route('index') }}">{{ config('app.name') }}</a>
             </div>
             <div class="nav-right">
+                <a href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a>
                 <a href="{{ route('user.show') }}">
                     {{ Auth::user()->name }}
                 </a>

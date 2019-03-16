@@ -1,5 +1,8 @@
+@extends('partials.master')
+
+@section('content')
 <h1>{{ $place->name }}</h1>
-<p>{{ $place->description }}</p>
+<p>{!! nl2br( htmlspecialchars($place->description) ) !!}</p>
 <p>
     <span>{{ $place->address->street_name_number }},</span>
     <span>{{ $place->address->postal_code }} {{ $place->address->postal_city }}</span>
@@ -44,9 +47,4 @@
     @endif
 </p>
 @endforeach
-@auth
-    @if ($place->userHasAccess($user))
-        <a href="{{ route('places.edit', $place) }}">Rediger</a>
-        <a href="{{ route('places.delete', $place) }}">Slett</a>
-    @endif
-@endauth
+@endsection
