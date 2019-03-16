@@ -109,8 +109,8 @@
                 id="{{ $random }}-{{ $weekday_slug }}-open_closed"
                 type="checkbox"
                 class="input-toggle"
-                name="open_hours_open_closed-{{ $weekday_slug }}"
-                {{ old('open_hours_open_closed-' . $weekday_slug, $day_is_open) ? 'checked' : null }}
+                name="open_hours_open_closed_{{ $weekday_slug }}"
+                {{ old('open_hours_open_closed_' . $weekday_slug, $day_is_open) ? 'checked' : null }}
             >
             <label class="input-toggle-label" for="{{ $random }}-{{ $weekday_slug }}-open_closed">
                 <span class="input-toggle-off">{{ __('Closed') }}</span>
@@ -122,19 +122,19 @@
                     type="text"
                     placeholder="{{ __('Opens at') }}"
                     name="open_hours_from-{{ $weekday_slug }}"
-                    value="{{ old('open_hours_from-' . $weekday_slug, $open_from) }}"
+                        name="open_hours_from_{{ $weekday_slug }}"
+                        value="{{ old('open_hours_from_' . $weekday_slug, $open_from) }}"
                     pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
                     oninvalid="this.setCustomValidity('{{ __('Fill out hours on the 24-hour format (hh:mm).') }}')"
                     oninput="this.setCustomValidity('')"
                         list="available-hours"
                     autocomplete="off"
-                >
-                <span>—</span>
-                <input
+                    ><span>—</span><input
                     type="text"
                     placeholder="{{ __('Closes at') }}"
                     name="open_hours_to-{{ $weekday_slug }}"
-                    value="{{ old('open_hours_to-' . $weekday_slug, $open_to) }}"
+                        name="open_hours_to_{{ $weekday_slug }}"
+                        value="{{ old('open_hours_to_' . $weekday_slug, $open_to) }}"
                     pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
                     oninvalid="this.setCustomValidity('{{ __('Fill out hours on the 24-hour format (hh:mm).') }}')"
                     oninput="this.setCustomValidity('')"

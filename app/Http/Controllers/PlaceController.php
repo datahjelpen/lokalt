@@ -279,9 +279,9 @@ class PlaceController extends Controller
         $weekdays = PlaceOpenHour::getWeekdays();
         foreach ($weekdays as $weekday_name) {
             $weekday_name_slug = str_slug($weekday_name);
-            $input_name_open_closed = 'open_hours_open_closed-' . $weekday_name_slug;
-            $input_name_open_from = 'open_hours_from-'  . $weekday_name_slug;
-            $input_name_open_to = 'open_hours_to-'  . $weekday_name_slug;
+            $input_name_open_closed = 'open_hours_open_closed_' . $weekday_name_slug;
+            $input_name_open_from = 'open_hours_from_'  . $weekday_name_slug;
+            $input_name_open_to = 'open_hours_to_'  . $weekday_name_slug;
 
             // Try to get existing opening hours
             $weekday_number = PlaceOpenHour::getWeekdayNumber($weekday_name);
