@@ -36,7 +36,7 @@
 
 @if (count($place->opening_hours->special) > 0)
     <hr>
-    <h3>Spesielle tider</h3>
+    <h3>{{ __('Special hours') }}</h3>
     @foreach ($place->opening_hours->special as $special_hour)
         <p><strong>{{ $weekdays[$special_hour->weekday] }} {{ $special_hour->date }}:</strong> {{ $special_hour->timeFromTo(false) }}</p>
     @endforeach

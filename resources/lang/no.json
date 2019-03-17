@@ -43,7 +43,10 @@
     "Closed": "Stengt",
     "Opens at": "Åpner kl.",
     "Closes at": "Stenger kl.",
+    ":weekday opens at": ":weekday åpner kl.",
+    ":weekday closes at": ":weekday stenger kl.",
     "Opening hours": "Åpningstider",
+    "Special hours": "Spesielle tider",
     "Place type": "Type sted",
     "Founded at": "Grunnlagt på",
 
@@ -68,6 +71,7 @@
     "Logout": "Logg ut",
     "Register": "Registrer",
     "Continue to": "Forsett til",
+    "Add new": "Legg til",
     "Add a new place": "Legg til et nytt sted",
     "Edit place": "Rediger stedet",
     "Delete place": "Slett stedet",
