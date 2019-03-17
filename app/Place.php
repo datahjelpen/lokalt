@@ -42,6 +42,10 @@ class Place extends Model
             'place_id' => $this->id
         ])->first();
 
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+
         return ($place_user !== null);
     }
 
