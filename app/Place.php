@@ -45,6 +45,26 @@ class Place extends Model
         return ($place_user !== null);
     }
 
+    public function getDescriptionAttribute($value)
+    {
+        return htmlspecialchars(strip_tags($value));
+    }
+
+    public function getDescriptionFormattedAttribute()
+    {
+        return nl2br( $this->description );
+    }
+
+    public function getDescriptionShortAttribute()
+    {
+        $description = substr($this->description, 0, 128);
+        if (strlen($description) < 128) {
+            return $description;
+        }
+
+        return $description . '...';
+    }
+
     public function getOpeningHoursRegularAttribute()
     {
         return PlaceOpenHour::where('place_id', $this->id)->whereIn('weekday', [1, 2, 3, 4, 5, 6, 7])->get();

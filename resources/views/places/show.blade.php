@@ -4,15 +4,15 @@
 <h1>{{ $place->name }}</h1>
 <ul>
     @if ($place->website)
-        <li><a href="{{ $place->website }}" target="_blank" ref="noopener nofollow noreferrer">{{ $place->website }}</a></li>
+        <li class="url"><a href="{{ $place->website }}" target="_blank" ref="noopener nofollow noreferrer">{{ $place->website }}</a></li>
     @endif
     @if ($place->phone)
-        <li><a href="tel:{{ $place->phone }}">{{ $place->phone }}</a></li>
+        <li class="phone"><a href="tel:{{ $place->phone }}">{{ $place->phone }}</a></li>
     @endif
     @if ($place->email)
-        <li><a href="mailto:{{ $place->email }}">{{ $place->email }}</a></li>
+        <li class="email"><a href="mailto:{{ $place->email }}">{{ $place->email }}</a></li>
     @endif
-    <li>
+    <li class="address">
         <a href="{{ url('https://www.google.com/maps/search/' .  $place->address->street_name_number . ' ' . $place->address->postal_code . ' ' . $place->address->postal_city) }}"
             target="_blank"
             ref="noopener nofollow noreferrer"
@@ -22,7 +22,7 @@
         </a>
     </li>
 </ul>
-<p>{!! nl2br( htmlspecialchars($place->description) ) !!}</p>
+<p class="about">{!! ($place->description_formatted) !!}</p>
 
 @if (count($place->opening_hours_regular) > 0)
     <h2>{{ __('Opening hours') }}</h2>

@@ -87,12 +87,21 @@ main {
 
 #footer-main {
     padding: 8em 1em 4em;
-    color: $gray;
+    color: $gray_dark;
     background-color: $body-bg;
+
+    .copyright {
+        color: $gray;
+    }
+
+    a.datahjelpen {
+        color: #ff2014;
+    }
 }
 
 #footer-main-wrapper {
     display: flex;
+    flex-direction: column;
     padding: 0 1em;
     margin: 0 auto;
     width: 38em;
@@ -162,6 +171,48 @@ fieldset {
 
         legend {
             background-color: $gray_light;
+        }
+    }
+}
+
+.address,
+.email,
+.phone,
+.url {
+    font-family: $font-family-mono;
+}
+
+.about {
+    font-family: $font-family-serif;
+}
+
+.place-link {
+    text-decoration: none;
+    color: $gray_dark;
+    display: block;
+
+    legend {
+        color: darken($primary, 55%);
+        font-size: 1.2em;
+    }
+
+    .address {
+        color: $gray;
+    }
+
+    &:hover,
+    &:focus {
+        text-decoration: none;
+        color: $gray_dark;
+
+        fieldset {
+            border-color: $accent;
+            box-shadow: 0 0.5em 1.5em -0.75em rgba(darken($accent, 30%), 0.25);
+        }
+
+        legend {
+            color: darken($accent, 55%);
+            background-color: $accent;
         }
     }
 }
@@ -240,6 +291,11 @@ fieldset {
 }
 
 .form-group-opening-hours {
+    &:hover,
+    &:focus-within {
+        background-color: $body-bg;
+    }
+
     input {
         width: 5em;
 
@@ -379,6 +435,14 @@ fieldset {
     }
 }
 
+.input-toggle:checked:focus + .input-toggle-label,
+.input-toggle:checked:hover + .input-toggle-label {
+    &::after {
+        background-color: darken($green, 20%);
+        border-color: darken($green, 20%);
+    }
+}
+
 .input-toggle-target {
     display: inline-block;
 }
@@ -504,7 +568,6 @@ fieldset {
 
     .pika-title {
         display: flex;
-        // padding: 1em;
 
         .pika-label {
             font-size: 0px; // Hide non-wrapper text nodes
