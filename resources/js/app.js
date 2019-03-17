@@ -1,4 +1,5 @@
 const moment = require("moment");
+const Pikaday = require("pikaday");
 const calendarI18N = {
     previousMonth: "<",
     nextMonth: ">",
@@ -38,10 +39,61 @@ const calendarI18N = {
         btnsAddNew.forEach(btn => {
             btn.addEventListener("click", placeFormSpecialHoursAdd);
         });
+
+        // Add special hours so we can edit them
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                const openingHours = JSON.parse(this.responseText);
+
+                openingHours.special.forEach(special => {
+                    btnsAddNew[0].click();
+                    const specialHourFields = placeForm.querySelectorAll(
+                        "fieldset.form-group-opening-hours-special"
+                    );
+                    const specialHourField =
+                        specialHourFields[specialHourFields.length - 1];
+                    const dateField = specialHourField.querySelector(
+                        ".input-opening-hours-special-date"
+                    );
+                    const toggleField = specialHourField.querySelector(
+                        ".input-toggle"
+                    );
+                    const fromField = specialHourField.querySelector(
+                        ".input-opening-hours-special-from"
+                    );
+                    const toField = specialHourField.querySelector(
+                        ".input-opening-hours-special-to"
+                    );
+                    const infoField = specialHourField.querySelector(
+                        ".open_hours_from-special-info"
+                    );
+                    const idField = specialHourField.querySelector(
+                        ".open_hours_from-special-id"
+                    );
+
+                    dateField.value = special.special_hours_date;
+                    infoField.value = "edit";
+                    idField.value = special.id;
+
+                    if (special.time_from != null) {
+                        toggleField.checked = true;
+                        dateField.value = special.special_hours_date;
+                        fromField.value = special.time_from;
+                        toField.value = special.time_to;
+                    }
+                });
+            }
+        };
+
+        const placeId = placeForm.querySelector(".form-place-id").value;
+        xhr.open("GET", "/steder/" + placeId + "/apningstider", true);
+        xhr.send();
     });
 
     function placeFormSpecialHoursAdd(event) {
         event.preventDefault();
+
         const specialHoursWrapper = this.parentNode.parentNode.querySelector(
             ".form-place-special-hours-wrapper"
         );
@@ -66,15 +118,9 @@ const calendarI18N = {
         newInputDate.setAttribute("placeholder", "YYYY-MM-DD");
         newInputDate.setAttribute("type", "text");
         newInputDate.setAttribute("required", "");
+        newInputDate.classList = "input-opening-hours-special-date";
+        setupSpecialHourDateField(newInputDate);
         newLegend.appendChild(newInputDate);
-
-        require(["pikaday"], function(Pikaday) {
-            new Pikaday({
-                field: newInputDate,
-                keyboardInput: false,
-                i18n: calendarI18N
-            });
-        });
         // LEGEND END
 
         // CHECKBOX START
@@ -128,6 +174,7 @@ const calendarI18N = {
         );
         newInputOpenFrom.setAttribute("autocomplete", "off");
         newInputOpenFrom.setAttribute("list", "available-hours");
+        newInputOpenFrom.classList = "input-opening-hours-special-from";
         newInputOpenFrom.addEventListener("invalid", invalidTimeInput);
         newInputOpenFrom.addEventListener("input", inputTimeInput);
         newInputHoursWrapperInner.appendChild(newInputOpenFrom);
@@ -151,6 +198,7 @@ const calendarI18N = {
         );
         newInputOpenTo.setAttribute("autocomplete", "off");
         newInputOpenTo.setAttribute("list", "available-hours");
+        newInputOpenTo.classList = "input-opening-hours-special-to";
         newInputOpenTo.addEventListener("invalid", invalidTimeInput);
         newInputOpenTo.addEventListener("input", inputTimeInput);
         newInputHoursWrapperInner.appendChild(newInputOpenTo);
@@ -164,6 +212,15 @@ const calendarI18N = {
         );
         newInputHiddenInfo.classList = "open_hours_from-special-info";
         newInputHiddenInfo.setAttribute("type", "hidden");
+        newInputHiddenInfo.value = "add";
+
+        let newInputHiddenId = document.createElement("input");
+        newInputHiddenId.setAttribute(
+            "name",
+            "open_hours_from_special_id[" + randomStr + "]"
+        );
+        newInputHiddenId.classList = "open_hours_from-special-id";
+        newInputHiddenId.setAttribute("type", "hidden");
 
         let newBtnDelete = document.createElement("button");
         newBtnDelete.setAttribute("type", "button");
@@ -178,6 +235,7 @@ const calendarI18N = {
         newFieldset.appendChild(newInputCheckboxLabel);
         newFieldset.appendChild(newInputHoursWrapper);
         newFieldset.appendChild(newInputHiddenInfo);
+        newFieldset.appendChild(newInputHiddenId);
         newFieldset.appendChild(newBtnDelete);
 
         // Append fieldset to the form
@@ -191,6 +249,13 @@ const calendarI18N = {
 
     function inputTimeInput() {
         this.setCustomValidity("");
+    }
+
+    function setupSpecialHourDateField(dateField) {
+        new Pikaday({
+            field: dateField,
+            i18n: calendarI18N
+        });
     }
 
     function deleteSpecialHoursEntry(event) {

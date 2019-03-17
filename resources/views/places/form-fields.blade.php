@@ -147,13 +147,15 @@
     @endforeach
 </fieldset>
 
-<fieldset>
-    <legend>{{ __('Special hours') }}</legend>
-    <p>
-        {{ __('Er det snart noen helligdager eller ferier? Du kan legge inn åpningtidene for de dagene for de her.') }}
+@if (isset($place))
+    <fieldset>
+        <legend>{{ __('Special hours') }}</legend>
+        <p>
+            {{ __('Er det snart noen helligdager eller ferier? Du kan legge inn åpningtidene for de dagene for de her.') }}
+            <button class="form-place-special-hours-add" type="button">{{ __('Add new') }}</button>
+        </p>
+        <input type="hidden" class="form-place-id" value="{{ $place->id }}">
+        <div class="form-place-special-hours-wrapper"></div>
         <button class="form-place-special-hours-add" type="button">{{ __('Add new') }}</button>
-    </p>
-    <div class="form-place-special-hours-wrapper"></div>
-    <button class="form-place-special-hours-add" type="button">{{ __('Add new') }}</button>
-</fieldset>
-
+    </fieldset>
+@endif

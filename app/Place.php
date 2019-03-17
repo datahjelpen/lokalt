@@ -52,16 +52,29 @@ class Place extends Model
 
     public function getOpeningHoursAttribute()
     {
+        return $this->openingHours();
+    }
+
+    public function openingHours(bool $limit = true)
+    {
         // Get all regular and special hours
         $open_hours_regular = PlaceOpenHour::where('place_id', $this->id)->
                                              whereIn('weekday', [1, 2, 3, 4, 5, 6, 7])->
                                              orderBy('weekday')->
                                              get();
-        $open_hours_special =  PlaceOpenHour::where('place_id', $this->id)->
-                                              whereDate('special_hours_date', '>=', Carbon::now())->
-                                              whereDate('special_hours_date', '<', Carbon::now()->addMonths(2))->
-                                              orderBy('special_hours_date')->
-                                              get();
+
+        if ($limit) {
+            $open_hours_special =  PlaceOpenHour::where('place_id', $this->id)->
+                                                  whereDate('special_hours_date', '>=', Carbon::now())->
+                                                  whereDate('special_hours_date', '<', Carbon::now()->addMonths(2))->
+                                                  orderBy('special_hours_date')->
+                                                  get();
+        } else {
+            $open_hours_special =  PlaceOpenHour::where('place_id', $this->id)->
+                                                  whereDate('special_hours_date', '>=', Carbon::now())->
+                                                  orderBy('special_hours_date')->
+                                                  get();
+        }
 
         $open_hours = new \stdClass;
         $open_hours->regular = [];

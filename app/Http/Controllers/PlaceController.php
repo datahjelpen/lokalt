@@ -200,6 +200,11 @@ class PlaceController extends Controller
         return view('places.show', compact('place', 'weekdays'));
     }
 
+    public function opening_hours(Place $place)
+    {
+        return response()->json($place->openingHours(false));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -318,7 +323,8 @@ class PlaceController extends Controller
             'open_hours_from_special_dates',
             'open_hours_from_special_opens',
             'open_hours_from_special_closes',
-            'open_hours_from_special_info'
+            'open_hours_from_special_info',
+            'open_hours_from_special_id'
         ];
 
         // If we have one field,. we must have the rest
@@ -331,12 +337,34 @@ class PlaceController extends Controller
             }
 
             foreach ($request->open_hours_from_special_dates as $special_date_key => $special_date_value) {
-                $place_open_hour = new PlaceOpenHour;
-                $place_open_hour->place_id = $place->id;
-                $place_open_hour->special_hours_date = $special_date_value;
-                $place_open_hour->time_from = $request->open_hours_from_special_opens[$special_date_key];
-                $place_open_hour->time_to = $request->open_hours_from_special_closes[$special_date_key];
-                $place_open_hour->save();
+                $info = $request->open_hours_from_special_info[$special_date_key];
+                $id = $request->open_hours_from_special_id[$special_date_key];
+
+                if ($info === "add") {
+                    $place_open_hour = new PlaceOpenHour;
+                    $place_open_hour->place_id = $place->id;
+                } else if ($info === "edit") {
+                    $place_open_hour = PlaceOpenHour::find($id);
+
+                    if ($place_open_hour === null) {
+                        continue;
+                    }
+                }
+
+                if ($info === "delete") {
+                    $place_open_hour = PlaceOpenHour::find($id);
+
+                    if ($place_open_hour === null) {
+                        continue;
+                    }
+
+                    $place_open_hour->delete();
+                } else {
+                    $place_open_hour->special_hours_date = $special_date_value;
+                    $place_open_hour->time_from = $request->open_hours_from_special_opens[$special_date_key];
+                    $place_open_hour->time_to = $request->open_hours_from_special_closes[$special_date_key];
+                    $place_open_hour->save();
+                }
             }
         }
 

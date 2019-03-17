@@ -40,7 +40,7 @@ class PlaceOpenHour extends Model
             return null;
         }
 
-        return $datetime_format->format('d. F');
+        return $datetime_format->format('Y-m-d');
     }
 
     public function timeFromTo(bool $show_normal = true)
