@@ -38,7 +38,7 @@
     <hr>
     <h3>Spesielle tider</h3>
     @foreach ($place->opening_hours->special as $special_hour)
-        <p><strong>{{ $weekdays[$special_hour->weekday] }} {{ $special_hour->special_hours_date }}:</strong> {{ $special_hour->timeFromTo(false) }}</p>
+        <p><strong>{{ $weekdays[$special_hour->weekday] }} {{ $special_hour->date }}:</strong> {{ $special_hour->timeFromTo(false) }}</p>
     @endforeach
 @endif
 

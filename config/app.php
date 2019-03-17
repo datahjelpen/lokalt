@@ -82,6 +82,8 @@ return [
 
     'locale' => env('APP_LOCALE', 'no'),
 
+    'time_locale' => env('APP_LOCALE_TIME', 'C'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale

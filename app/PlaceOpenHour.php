@@ -13,6 +13,10 @@ class PlaceOpenHour extends Model
 
     public $timestamps = false;
 
+    public $appends = [
+        "date"
+    ];
+
     public function getTimeFromAttribute($value)
     {
         $datetime_format = DateTime::createFromFormat('H:i:s', $value);
@@ -42,6 +46,17 @@ class PlaceOpenHour extends Model
 
         return $datetime_format->format('Y-m-d');
     }
+
+    public function getDateAttribute()
+    {
+        $datetime_format = DateTime::createFromFormat('Y-m-d', $this->special_hours_date);
+        if ($datetime_format === false) {
+            return null;
+        }
+
+        return strftime("%d. %B", $datetime_format->getTimestamp());
+    }
+
 
     public function timeFromTo(bool $show_normal = true)
     {
