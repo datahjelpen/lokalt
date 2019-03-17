@@ -35,7 +35,9 @@ class PlacesTableSeeder extends Seeder
             'description' => 'Ansvarlig for en avdeling innenfor bedriften.'
         ]);
 
-        factory(Place::class, 50)->create();
-        factory(PlaceOpenHour::class, 50)->create();
+        if (App::environment('local')) {
+            factory(Place::class, 50)->create();
+            factory(PlaceOpenHour::class, 50)->create();
+        }
     }
 }
