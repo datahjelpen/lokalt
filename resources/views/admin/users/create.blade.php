@@ -3,7 +3,7 @@
 @section('content')
 
 <h1>{{ __('Register') }}</h1>
-<form method="POST" action="{{ route('register') }}">
+<form method="POST" action="{{ route('admin.users.store') }}">
     @csrf
 
     @include('auth.register-fields')

@@ -21,6 +21,14 @@ Route::post('konto', 'UserController@update')->name('user.update');
 
 Route::get('kontrollpanel', 'DashboardController@index')->name('dashboard.index');
 
+Route::get('admin/kontrollpanel', 'AdminController@index')->name('admin.index');
+Route::post('admin/steder/sok', 'AdminController@search_place')->name('admin.places.search');
+Route::post('admin/steder/søk', 'AdminController@search_place');
+Route::get('admin/steder/{place}/endre', 'AdminController@edit_place')->name('admin.places.edit');
+Route::patch('admin/steder/{place}/oppdater', 'AdminController@update_place')->name('admin.places.update');
+Route::get('admin/brukere/opprett', 'AdminController@create_user')->name('admin.users.create');
+Route::post('admin/brukere/lagre', 'AdminController@store_user')->name('admin.users.store');
+
 Route::prefix('steder')->group(function () {
     Route::get('/', 'PlaceController@index')->name('places.index');
     Route::get('opprett', 'PlaceController@create')->name('places.create');

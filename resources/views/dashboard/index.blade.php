@@ -2,6 +2,9 @@
 
 @section('content')
 <h1>{{ __('Dashboard') }}</h1>
+@role('admin')
+    <a href="{{ route('admin.index') }}">Admin</a>
+@endrole
 <h2>{{ __('My places') }}</h2>
 <a href="{{ route('places.create') }}">{{ __('Add a new place') }}</a>
 @foreach ($places as $place)
