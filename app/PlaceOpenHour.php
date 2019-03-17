@@ -61,14 +61,14 @@ class PlaceOpenHour extends Model
     public function timeFromTo(bool $show_normal = true)
     {
         if ($this->special_hours_date !== null && $this->time_from == null && $show_normal && $this->normal_time_from != null) {
-            return __('Closed') . '. (' . __('Normally:') . ' ' . $this->normal_time_from . ' — ' . $this->normal_time_to . ')';
+            return __('Closed') . '. (' . __('Normally:') . ' ' . $this->normal_time_from . '-' . $this->normal_time_to . ')';
         }
 
         if ($this->time_from == null) {
             return __('Closed');
         }
 
-        return $this->time_from . ' — ' . $this->time_to;
+        return $this->time_from . '-' . $this->time_to;
     }
 
     // Following ISO 8601 for weekday numbering
@@ -99,7 +99,7 @@ class PlaceOpenHour extends Model
     {
         $available_hours = [];
 
-        // Generate from 06:00 - 00:00
+        // Generate from 06:00-00:00
         for ($hour=6; $hour < 24; $hour++) {
             $hour_string = $hour;
 
@@ -119,7 +119,7 @@ class PlaceOpenHour extends Model
             }
         }
 
-        // Generate from 00:00 - 06:00
+        // Generate from 00:00-06:00
         for ($hour=0; $hour < 6; $hour++) {
             $hour_string = $hour;
 

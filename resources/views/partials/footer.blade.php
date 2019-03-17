@@ -1,8 +1,8 @@
 <footer id="footer-main">
     <div id="footer-main-wrapper">
-        <h4>{{ config('app.name') }} — en tjeneste levert av <a href="https://datahjelpen.no" rel="noopener" class="datahjelpen">Datahjelpen</a></h4>
+        <h4>{{ config('app.name') }} — en tjeneste levert av <a href="https://datahjelpen.no" target="_blank" rel="noopener" class="datahjelpen">Datahjelpen</a></h4>
         <p>
-            <a href="https://datahjelpen.no/personvern" rel="noopener" >Personvern</a>
+            <a href="https://datahjelpen.no/personvern" target="_blank" rel="noopener">Personvern</a>
             <span>|</span>
             <a href="{{ route('login') }}">{{ __('Login') }}</a>
             @if (Route::has('register'))
