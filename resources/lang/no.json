@@ -9,7 +9,7 @@
 
     "Name": "Navn",
     "Email": "E-post",
-    "E-Mail Address": "E-post adresse",
+    "E-Mail Address": "E-postadresse",
     "Description": "Beskrivelse",
     "Website": "Nettside",
     "Phone": "Telefon",
@@ -34,6 +34,7 @@
     "User info": "Brukerinfo",
     "Dashboard": "Kontrollpanel",
     "Copyright": "Opphavsrett",
+    "Places": "Steder",
     "My places": "Mine steder",
     "About place": "Om stedet",
     "Links and contact info": "Lenker og kontaktinformasjon",
@@ -49,6 +50,7 @@
     "Special hours": "Spesielle tider",
     "Place type": "Type sted",
     "Founded at": "Grunnlagt på",
+    "My profile": "Min profil",
 
     "Are you sure?": "Er du sikker?",
     "Do you really want to delete :place?": "Er du sikker på at du vil slette :place?",
