@@ -107,6 +107,11 @@ class Place extends Model
 
         for ($i=1; $i <= 7 ; $i++) {
             $regular = new PlaceOpenHour;
+            $regular->weekday = $i;
+            $regular->time_from = null;
+            $regular->time_to = null;
+            $regular->special_hours_date = null;
+
             $open_hours->regular[$i] = $regular;
         }
 
