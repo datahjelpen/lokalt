@@ -25,8 +25,8 @@ class PlaceController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except('show');
-        $this->middleware('verified')->except('show');
+        $this->middleware('auth')->except('show', 'opening_hours');
+        $this->middleware('verified')->except('show', 'opening_hours');
     }
 
     /**
