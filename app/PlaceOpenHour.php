@@ -20,6 +20,15 @@ class PlaceOpenHour extends Model
         "date",
     ];
 
+    public function getTimeFromCarbonAttribute()
+    {
+        if ($this->time_from === null) {
+            return null;
+        }
+
+        return Carbon::createFromFormat('H:i', $this->time_from);
+    }
+
     public function getTimeFromAttribute($value)
     {
         $datetime_format = DateTime::createFromFormat('H:i:s', $value);
@@ -28,6 +37,15 @@ class PlaceOpenHour extends Model
         }
 
         return $datetime_format->format('H:i');
+    }
+
+    public function getTimeToCarbonAttribute()
+    {
+        if ($this->time_to === null) {
+            return null;
+        }
+
+        return Carbon::createFromFormat('H:i', $this->time_to);
     }
 
     public function getTimeToAttribute($value)

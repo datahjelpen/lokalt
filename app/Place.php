@@ -101,6 +101,7 @@ class Place extends Model
         }
 
         $open_hours = new \stdClass;
+        $open_hours->open_now = false;
         $open_hours->regular = [];
         $open_hours->special = [];
 
@@ -131,6 +132,17 @@ class Place extends Model
                 $special->normal_time_to = $regular->time_to;
 
                 $open_hours->regular[$special->weekday] = $special;
+            }
+        }
+
+        // Figure out if the place is open right now
+        $day_of_week = Carbon::now()->dayOfWeekIso;
+        if (isset($open_hours->regular[$day_of_week])) {
+            $todays_opening_hours = $open_hours->regular[$day_of_week];
+
+            if ($todays_opening_hours->time_from !== null) {
+                $open_now = Carbon::now()->isBetween($todays_opening_hours->time_from_carbon, $todays_opening_hours->time_to_carbon);
+                $open_hours->open_now = $open_now;
             }
         }
 
