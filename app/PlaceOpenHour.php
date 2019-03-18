@@ -14,7 +14,10 @@ class PlaceOpenHour extends Model
     public $timestamps = false;
 
     public $appends = [
-        "date"
+        "weekday_name",
+        "opening_hours",
+        "opening_hours_no_ex",
+        "date",
     ];
 
     public function getTimeFromAttribute($value)
@@ -85,14 +88,33 @@ class PlaceOpenHour extends Model
         ];
     }
 
-    public static function getWeekdayName()
+    public static function getWeekdayName(int $weekday)
     {
-        return self::getWeekdays()[Carbon::now()->dayOfWeekIso];
+        return self::getWeekdays()[$weekday];
     }
 
     public static function getWeekdayNumber(String $weekday)
     {
         return array_search(ucfirst($weekday), self::getWeekdays());
+    }
+
+    public function getWeekDayNameAttribute()
+    {
+        if ($this->weekday == null) {
+            return null;
+        }
+
+        return self::getWeekdayName($this->weekday);
+    }
+
+    public function getOpeningHoursAttribute()
+    {
+        return $this->timeFromTo();
+    }
+
+    public function getOpeningHoursNoExAttribute()
+    {
+        return $this->timeFromTo(false);
     }
 
     public static function getAvailableHours() : array
