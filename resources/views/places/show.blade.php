@@ -24,7 +24,7 @@
             </a>
         </li>
     </ul>
-    <p class="about">{!! ($place->description_formatted) !!}</p>
+    <p class="about" itemprop="description">{!! ($place->description_formatted) !!}</p>
 
     @if (count($place->opening_hours_regular) > 0)
         <h2>{{ __('Opening hours') }}</h2>
@@ -40,6 +40,7 @@
     @if (count($place->opening_hours->special) > 0)
         <hr>
         <h3>{{ __('Special hours') }}</h3>
+        <p class="about">{!! ($place->special_hours_text) !!}</p>
         @foreach ($place->opening_hours->special as $special_hour)
             <p><strong>{{ $weekdays[$special_hour->weekday] }} {{ $special_hour->date }}:</strong> {{ $special_hour->timeFromTo(false) }}</p>
             <meta itemprop="openingHours" content="{{ $special_hour->date }} {{ $special_hour->timeFromTo(false) }}"/>

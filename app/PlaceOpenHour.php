@@ -17,7 +17,7 @@ class PlaceOpenHour extends Model
         "weekday_name",
         "opening_hours",
         "opening_hours_no_ex",
-        "date",
+        "date"
     ];
 
     public function getTimeFromCarbonAttribute()

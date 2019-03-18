@@ -69,6 +69,16 @@ class Place extends Model
         return $description . '...';
     }
 
+    public function getSpecialHoursTextAttribute($value)
+    {
+        return htmlspecialchars(strip_tags($value));
+    }
+
+    public function getSpecialHoursTextFormattedAttribute()
+    {
+        return nl2br( $this->special_hours_text );
+    }
+
     public function getOpeningHoursRegularAttribute()
     {
         return PlaceOpenHour::where('place_id', $this->id)->whereIn('weekday', [1, 2, 3, 4, 5, 6, 7])->get();
@@ -102,6 +112,7 @@ class Place extends Model
 
         $open_hours = new \stdClass;
         $open_hours->open_now = false;
+        $open_hours->special_hours_text = $this->special_hours_text;
         $open_hours->regular = [];
         $open_hours->special = [];
 

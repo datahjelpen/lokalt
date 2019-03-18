@@ -59,13 +59,14 @@ class PlaceController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'description' => ['nullable', 'string', 'max:1024'],
             'address_id' => ['required', Rule::in(Address::pluck('id')->toArray())],
             'place_type_id' => ['required', Rule::in(PlaceType::pluck('id')->toArray())],
             'website' => ['nullable', 'URL'],
             'phone' => ['nullable', 'string'],
             'email' => ['nullable', 'email'],
-            'founded_at' => ['nullable', 'date']
+            'founded_at' => ['nullable', 'date'],
+            'special_hours_text' => ['nullable', 'string', 'max:512']
         ]);
     }
 
@@ -127,7 +128,7 @@ class PlaceController extends Controller
         $place->place_type_id = $request->place_type_id;
         $place->name = $request->name;
         $place->slug = $request->slug;
-        $place->description = $request->description;
+        $place->description = strip_tags($request->description);
         $place->address_id = $request->address_id;
         $place->place_type_id = $request->place_type_id;
         $place->website = $request->website;
@@ -271,13 +272,14 @@ class PlaceController extends Controller
         // Create the place
         $place->place_type_id = $request->place_type_id;
         $place->name = $request->name;
-        $place->description = $request->description;
+        $place->description = strip_tags($request->description);
         $place->address_id = $request->address_id;
         $place->place_type_id = $request->place_type_id;
         $place->website = $request->website;
         $place->phone = $request->phone;
         $place->email = $request->email;
         $place->founded_at = $request->founded_at;
+        $place->special_hours_text = strip_tags($request->special_hours_text);
         $place->save();
 
         // Set opening hours
