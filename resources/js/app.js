@@ -1,35 +1,40 @@
-const moment = require("moment");
-const Pikaday = require("pikaday");
-const calendarI18N = {
-    previousMonth: "<",
-    nextMonth: ">",
-    months: [
-        "Januar",
-        "Februar",
-        "Mars",
-        "April",
-        "Mai",
-        "Juni",
-        "Juli",
-        "August",
-        "September",
-        "Oktober",
-        "November",
-        "Desember"
-    ],
-    weekdays: [
-        "Søndag",
-        "Mandag",
-        "Tirsdag",
-        "Onsdag",
-        "Torsdag",
-        "Fredag",
-        "Lørdag"
-    ],
-    weekdaysShort: ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"]
-};
-
 (function() {
+    // Polyfill for nodeList.forEach in IE
+    if (window.NodeList && !NodeList.prototype.forEach) {
+        NodeList.prototype.forEach = Array.prototype.forEach;
+    }
+
+    const moment = require("moment");
+    const Pikaday = require("pikaday");
+    const calendarI18N = {
+        previousMonth: "<",
+        nextMonth: ">",
+        months: [
+            "Januar",
+            "Februar",
+            "Mars",
+            "April",
+            "Mai",
+            "Juni",
+            "Juli",
+            "August",
+            "September",
+            "Oktober",
+            "November",
+            "Desember"
+        ],
+        weekdays: [
+            "Søndag",
+            "Mandag",
+            "Tirsdag",
+            "Onsdag",
+            "Torsdag",
+            "Fredag",
+            "Lørdag"
+        ],
+        weekdaysShort: ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"]
+    };
+
     const placeForms = document.querySelectorAll("form.form-place");
     placeForms.forEach(placeForm => {
         const btnsAddNew = placeForm.querySelectorAll(
@@ -103,7 +108,7 @@ const calendarI18N = {
 
         // FIELDSET
         let newFieldset = document.createElement("fieldset");
-        newFieldset.classList =
+        newFieldset.className +=
             "form-group form-group-opening-hours form-group-opening-hours-special";
 
         // LEGEND START
@@ -118,7 +123,7 @@ const calendarI18N = {
         newInputDate.setAttribute("placeholder", "YYYY-MM-DD");
         newInputDate.setAttribute("type", "text");
         newInputDate.setAttribute("required", "");
-        newInputDate.classList = "input-opening-hours-special-date";
+        newInputDate.className += "input-opening-hours-special-date";
         setupSpecialHourDateField(newInputDate);
         newLegend.appendChild(newInputDate);
         // LEGEND END
@@ -130,34 +135,34 @@ const calendarI18N = {
             "id",
             "form-place-" + randomStr + "-open_closed"
         );
-        newInputCheckbox.classList = "input-toggle";
+        newInputCheckbox.className += "input-toggle";
 
         let newInputCheckboxLabel = document.createElement("label");
         newInputCheckboxLabel.setAttribute(
             "for",
             "form-place-" + randomStr + "-open_closed"
         );
-        newInputCheckboxLabel.classList = "input-toggle-label";
+        newInputCheckboxLabel.className += "input-toggle-label";
 
         let newInputCheckboxLabelSpan = document.createElement("span");
-        newInputCheckboxLabelSpan.classList = "input-toggle-off";
+        newInputCheckboxLabelSpan.className += "input-toggle-off";
         newInputCheckboxLabelSpan.appendChild(
             document.createTextNode("Stengt")
         );
         newInputCheckboxLabel.appendChild(newInputCheckboxLabelSpan);
 
         newInputCheckboxLabelSpan = document.createElement("span");
-        newInputCheckboxLabelSpan.classList = "input-toggle-on";
+        newInputCheckboxLabelSpan.className += "input-toggle-on";
         newInputCheckboxLabelSpan.appendChild(document.createTextNode("Åpent"));
         newInputCheckboxLabel.appendChild(newInputCheckboxLabelSpan);
         // CHECKBOX END
 
         // INPUT TIME START
         let newInputHoursWrapper = document.createElement("div");
-        newInputHoursWrapper.classList = "input-toggle-target";
+        newInputHoursWrapper.className += "input-toggle-target";
 
         let newInputHoursWrapperInner = document.createElement("div");
-        newInputHoursWrapperInner.classList = "input-toggle-on";
+        newInputHoursWrapperInner.className += "input-toggle-on";
         newInputHoursWrapper.appendChild(newInputHoursWrapperInner);
 
         // open from
@@ -174,7 +179,7 @@ const calendarI18N = {
         );
         newInputOpenFrom.setAttribute("autocomplete", "off");
         newInputOpenFrom.setAttribute("list", "available-hours");
-        newInputOpenFrom.classList = "input-opening-hours-special-from";
+        newInputOpenFrom.className += "input-opening-hours-special-from";
         newInputOpenFrom.addEventListener("invalid", invalidTimeInput);
         newInputOpenFrom.addEventListener("input", inputTimeInput);
         newInputHoursWrapperInner.appendChild(newInputOpenFrom);
@@ -198,7 +203,7 @@ const calendarI18N = {
         );
         newInputOpenTo.setAttribute("autocomplete", "off");
         newInputOpenTo.setAttribute("list", "available-hours");
-        newInputOpenTo.classList = "input-opening-hours-special-to";
+        newInputOpenTo.className += "input-opening-hours-special-to";
         newInputOpenTo.addEventListener("invalid", invalidTimeInput);
         newInputOpenTo.addEventListener("input", inputTimeInput);
         newInputHoursWrapperInner.appendChild(newInputOpenTo);
@@ -210,7 +215,7 @@ const calendarI18N = {
             "name",
             "open_hours_from_special_info[" + randomStr + "]"
         );
-        newInputHiddenInfo.classList = "open_hours_from-special-info";
+        newInputHiddenInfo.className += "open_hours_from-special-info";
         newInputHiddenInfo.setAttribute("type", "hidden");
         newInputHiddenInfo.value = "add";
 
@@ -219,14 +224,14 @@ const calendarI18N = {
             "name",
             "open_hours_from_special_id[" + randomStr + "]"
         );
-        newInputHiddenId.classList = "open_hours_from-special-id";
+        newInputHiddenId.className += "open_hours_from-special-id";
         newInputHiddenId.setAttribute("type", "hidden");
 
         let newBtnDelete = document.createElement("button");
         newBtnDelete.setAttribute("type", "button");
         newBtnDelete.setAttribute("aria-label", "slett");
         newBtnDelete.appendChild(document.createTextNode("X"));
-        newBtnDelete.classList = "opening-hours-special-delete";
+        newBtnDelete.className += "opening-hours-special-delete";
         newBtnDelete.addEventListener("click", deleteSpecialHoursEntry);
 
         // Append elements to the fieldset
@@ -240,7 +245,7 @@ const calendarI18N = {
 
         // Append fieldset to the form
         specialHoursWrapper.appendChild(newFieldset);
-        specialHoursWrapper.classList.add("has-children");
+        specialHoursWrapper.className += " has-children";
     }
 
     function invalidTimeInput() {
@@ -262,7 +267,7 @@ const calendarI18N = {
         event.preventDefault();
 
         const fieldset = this.parentNode;
-        fieldset.classList = "hidden";
+        fieldset.className += " hidden";
 
         // Make sure we don't have any required input fields
         // that would prevent the form from submiting.
