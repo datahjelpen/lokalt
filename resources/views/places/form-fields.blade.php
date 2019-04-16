@@ -151,7 +151,7 @@
     <fieldset>
         <legend>{{ __('Special hours') }}</legend>
         <p>
-            {{ __('Er det snart noen helligdager eller ferier? Du kan legge inn åpningtidene for de dagene for de her.') }}
+            {{ __('Got any holidays or vacations coming up? You can add the opening hours for those days here.') }}
         </p>
         <div class="form-group">
             <label for="{{ $random }}-special_hours_text">{{ __('Reason for special hours') }}</label>
