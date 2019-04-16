@@ -70,7 +70,6 @@
     "The closing time on :weekday is missing.": "Stengetiden på :weekday mangler.",
     "The opening time on :weekday is not on the correct format.": "Åpningstiden på :weekday er ikke riktig formatert.",
     "The closing time on :weekday is not on the correct format.": "Stengetiden på :weekday er ikke riktig formatert.",
-    "The opening time on :weekday comes after the closing time.": "Åpningstiden på :weekday kommer etter stengetiden.",
 
     "Login": "Logg inn",
     "Logout": "Logg ut",

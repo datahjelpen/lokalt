@@ -205,9 +205,6 @@ class PlaceOpenHour extends Model
         } else if ($time_to_is_invalid) {
             $error = true;
             $error_message = 'The closing time on :weekday is not on the correct format.';
-        } else if ($time_from > $time_to) {
-            $error = true;
-            $error_message = 'The opening time on :weekday comes after the closing time.';
         }
 
         if ($error) {
