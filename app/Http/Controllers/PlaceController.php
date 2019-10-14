@@ -27,6 +27,7 @@ class PlaceController extends Controller
     {
         $this->middleware('auth')->except('show', 'opening_hours');
         $this->middleware('verified')->except('show', 'opening_hours');
+        $this->middleware('cors')->only('opening_hours');
     }
 
     /**
