@@ -40,5 +40,4 @@ Route::prefix('steder')->group(function () {
     Route::delete('{place}/slett', 'PlaceController@destroy')->name('places.destroy');
 
     Route::get('{place}/apningstider', 'PlaceController@opening_hours');
-    Route::get('{place}/åpningstider', 'PlaceController@opening_hours');
 });
