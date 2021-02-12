@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,6 +14,8 @@ class CreatePlacesTable extends Migration
      */
     public function up()
     {
+        DB::statement('SET SESSION sql_require_primary_key=0');
+
         Schema::create('places', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');

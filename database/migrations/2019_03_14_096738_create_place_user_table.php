@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,6 +14,8 @@ class CreatePlaceUserTable extends Migration
      */
     public function up()
     {
+        DB::statement('SET SESSION sql_require_primary_key=0');
+
         Schema::create('place_user', function (Blueprint $table) {
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
