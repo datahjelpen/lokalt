@@ -17,7 +17,7 @@ class CreatePlaceTypesTable extends Migration
         DB::statement('SET SESSION sql_require_primary_key=0');
 
         Schema::create('place_types', function (Blueprint $table) {
-            $table->tinyIncrements('id')->primary();
+            $table->tinyIncrements('id');
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable()->default(null);
