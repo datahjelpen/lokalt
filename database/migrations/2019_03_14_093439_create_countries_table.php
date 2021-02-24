@@ -17,7 +17,7 @@ class CreateCountriesTable extends Migration
         DB::statement('SET SESSION sql_require_primary_key=0');
 
         Schema::create('countries', function (Blueprint $table) {
-            $table->smallIncrements('id')->primary();
+            $table->smallIncrements('id');
             $table->string('name_short_local')->nullable()->default(null);
             $table->string('name_short_international');
             $table->string('name_official_local')->nullable()->default(null);
