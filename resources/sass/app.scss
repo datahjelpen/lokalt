@@ -225,6 +225,7 @@ fieldset {
     input,
     textarea,
     select {
+        position: relative;
         padding: 0.25em 0.5em;
         border: 1px solid $gray;
         color: $gray_dark;
