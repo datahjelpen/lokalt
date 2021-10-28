@@ -13,7 +13,7 @@
 
 Route::get('/', 'SiteController@index')->name('index');
 
-Auth::routes(['verify' => true]);
+Auth::routes(['verify' => true, 'register' => false]);
 Route::get('epost-bekreftet', 'Auth\VerificationController@complete');
 
 Route::get('konto', 'UserController@show')->name('user.show');

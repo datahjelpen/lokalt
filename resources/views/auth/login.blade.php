@@ -44,12 +44,12 @@
         </button>
     </div>
 
-    <div class="form-group">
+    <!-- <div class="form-group">
         @if (Route::has('password.request'))
             <a href="{{ route('password.request') }}">
                 {{ __("Forgot Your Password?") }}
             </a>
         @endif
-    </div>
+    </div> -->
 </form>
 @endsection
